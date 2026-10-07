@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+
+    <!-- 1. Go CLI reads this tag statically. 
+         The root domain mapping allows 'go get' to resolve any sub-paths automatically. -->
+    <meta name="go-import" content="pkg.ate.dev/REPO git https://github.com/agent-substrate/REPO">
+    <meta name="go-source" content="pkg.ate.dev/REPO https://github.com/agent-substrate/REPO https://github.com/agent-substrate/REPO/tree/main/{/dir} https://github.com/agent-substrate/REPO/blob/main{/dir}/{file}#L{line}">
+
+    <script>
+        // 2. Web browsers execute this script to instantly redirect
+        (function() {
+            const baseVanityDomain = "pkg.ate.dev";
+            const targetDocumentationHost = "https://pkg.go.dev";
+
+            // Capture incoming path, parameters, and fragments
+            const currentPath = window.location.pathname; // e.g., /foo/bar/qux
+            const currentSearch = window.location.search;
+            const currentHash = window.location.hash;
+
+            // Build the absolute destination path: https://go.dev/foo/bar/qux
+            const destination = targetDocumentationHost + "/" + baseVanityDomain + currentPath + currentSearch + currentHash;
+
+            // Redirect the user immediately
+            window.location.replace(destination);
+        })();
+    </script>
+</head>
+<body>
+    If you are not redirected, <a id="fallback" href="https://github.com">click here</a>.
+    <script>
+        // Update fallback link text just in case the redirect takes a moment
+        document.getElementById('fallback').href = "https://github.com" + window.location.pathname + window.location.search + window.location.hash;
+    </script>
+</body>
+</html>
